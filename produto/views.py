@@ -7,3 +7,9 @@ def produto_list(request):
     context = {'object_list': objects}
     return render(request, template_name, context)
 
+def produto_detail(request, pk):
+    template_name = 'produto_detail.html'
+    obj = Produto.objects.get(pk=pk)
+    context = {'object': obj}
+    return render(request, template_name, context)
+
