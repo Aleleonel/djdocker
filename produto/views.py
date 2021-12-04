@@ -1,10 +1,32 @@
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from produto.forms import ProdutoForm
 from .forms import ProdutoForm
 
 from webstore.settings import TEMPLATES
 from .models import Produto
+import io
+import csv
+
+
+def replace_number(request):
+    template_name = 'replace_number.html'
+    if request.method == "POST" and request.FILES['myfile']:
+        myfile = request.FILES['myfile']
+        file = myfile.read().decode('utf-8')
+        reader = csv.reader(io.StringIO(file))
+        data = [line for line in reader]
+        
+        numbers = []
+        for numero in range(len(data)):           
+            numbers.append(data[numero])
+        
+        context = {
+            'data': numbers
+        }
+        return render(request, template_name, context)    
+    return render(request, template_name)
 
 def produto_list(request):
     template_name = 'produto_list.html'
@@ -24,6 +46,11 @@ def produto_add(request):
 
 
 class ProdutoCreate(CreateView):
+    model=Produto
+    template_name='produto_form.html'
+    form_class=ProdutoForm
+
+class ProdutoUpdate(UpdateView):
     model=Produto
     template_name='produto_form.html'
     form_class=ProdutoForm
