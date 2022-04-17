@@ -9,4 +9,5 @@ urlpatterns =[
     path('add/', v.ProdutoCreate.as_view(), name='produto_add'),
     path('update/<int:pk>/', v.ProdutoUpdate.as_view(), name='produto_update'),
     path('replace_number/', v.replace_number, name='replace_number'),
+    path('<int:pk>/json/', v.produto_json, name='produto_json'),
 ]
